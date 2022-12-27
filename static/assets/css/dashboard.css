@@ -1,0 +1,17 @@
+.dashboard-container{
+    height: 100%;
+    display: flex;
+    gap: 2.5rem;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.dashboard-container h1 {
+    font-size: clamp(24px, 4vw, 60px);
+    text-align: center;
+}
+
+.dashboard-container svg {
+    height: clamp(250px, 5vw, 400px);
+}

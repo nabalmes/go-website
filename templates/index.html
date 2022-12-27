@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="integritynet">
+  <meta name="description" content="pudding mobile">
+  <meta name="keywords" content="software engineering, software development, web development, software, web, engineering, development, developer, designer, user interface, user experience, developer relation, product design, web design, design, design system, system, React, framework, Svelte, vanilla, javascript, html, css, node, philippines, batangas, computer science">
+
+  <meta property="og:title" content="pudding mobile">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="../static/assets/img/pudding-logo">
+  <meta property="og:url" content="">
+  <meta property="og:description" content="A pudding mobile app monitoring">
+  
+  <link rel="stylesheet" href="../static/assets/css/login.css">
+  <link rel="stylesheet" href="../static/assets/css/validator.css">
+  <!-- <link rel="stylesheet" href="../static/assets/css/dashboard.css"> -->
+
+  <title>{{ .Title }}</title>
+</head>
+<style>
+
+  
+</style>
+<body>
+ <div class="modal-container">
+  <div class="modal-wrapper">
+    <div class="mobile-content">
+      <!-- *Decode Style -->
+      <div class="decode-style" style="display: none;pointer-events: none;">
+          <select id="decoding-style" size="1" class="decoding-dropdown mobile-decoding">
+              <option value="once">Decode once</option>
+              <option value="continuously">Decode continuously</option>
+          </select>
+      </div>
+      <!-- *Scanner -->
+      <div class="scanner-mobile__wrapper">
+          <img class="img-scan" src="/static/assets/img/scangif4.gif" alt="">
+          <video id="video" class="scanner-mobile" src=""></video>
+      </div>
+
+      <!-- *Buttons -->
+      <div class="mobile-btns">
+          <div id="sourceSelectPanel" class="video-source">
+              <select id="sourceSelect" class="btn-save__modal mobile-btn">
+                  <option value="" selected="selected" disabled="disabled">Camera View</option>
+              </select>
+          </div>
+
+          <button id="startButton" class="btn-save__modal mobile-btn">Scan QR</button>
+          <button id="resetButton" class="btn-save__modal mobile-btn">Close Camera</button>
+      </div>
+      <button class="button close-modal">Cancel</button>
+  </div>
+  </div>
+ </div>
+
+</div>
+  <nav class="global-header-outer">
+    <header class="global-header">
+      <div class="header-logo">
+        <a href="#" class="logo-text">
+          <img src="../static/assets/images/cia-logo.png" alt="logoo">
+          <span>Central Intelligence Agency</span>
+        </a>
+      </div>
+    </header>
+  </nav>
+  <main class="main-content login-content">
+    <section class="login-container">
+        <form class="form-wrapper" method="POST">
+            <div class="input-wrapper">
+              <label for="username">Username</label>
+              <input type="text" class="form-input" name="username" id="username" required>
+            </div>
+
+            <div class="input-wrapper">
+              <label for="password">Password</label>
+              <input type="password" class="form-input" name="password" id="password" required>
+              <div class="toggle-password"></div>
+            </div>
+            <div class="button-container">
+
+              <button class="button login-btn">Login</button>
+              <div id="scan-id-btn" class="button scan-btn">login with id alibi</div>
+              <div id="signup-btn" class="button signup-btn">Sign up</div>
+            </div>
+        </form>
+    </section>
+
+    <section class="register-container">
+     
+      <div class="form-wrapper">
+        <h1>Register</h1>
+          <div class="input-wrapper">
+            <label for="reg-username">Username</label>
+            <input type="text" name="reg-username" class="form-input" id="reg-username" readonly required>
+          </div>
+
+          <div class="input-wrapper">
+            <label for="password">Password</label>
+            <input type="password" name="reg-password" class="form-input" id="reg-password" required>
+          </div>
+
+          <div class="input-wrapper">
+            <label for="reg-firstname">First Name</label>
+            <input type="text" name="reg-firstname" class="form-input" id="reg-firstname" required>
+          </div>
+
+          <div class="input-wrapper">
+            <label for="reg-lastname">Last Name</label>
+            <input type="text" name="reg-lastname" class="form-input" id="reg-lastname" required>
+          </div>
+
+          <div class="input-wrapper">
+            <label for="reg-contact">Contact #</label>
+            <input type="tel" name="reg-contact" class="form-input" id="reg-contact" required>
+          </div>
+          <div class="button-container">
+
+            <button class="button login-btn" id="register-btn">Register</button>
+            <div id="back-btn" class="button signup-btn">Back</div>
+          </div>
+      </div>
+  </section>
+  </main>
+    
+</body>
+<script src="../static/jquery/jquery.3.1.6.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/@zxing/library@latest"></script>
+<script src="../static/assets/js/validator.js"></script>
+<script>
+let signupBtn = document.getElementById("signup-btn");
+let loginContainer = document.querySelector(".login-container")
+let registerContainer = document.querySelector(".register-container")
+let modalContainer = document.querySelector(".modal-container")
+let scanBtn = document.getElementById("scan-id-btn")
+signupBtn.addEventListener('click', ()=>{
+  localStorage.setItem("data-action", "signup")
+  loginContainer.classList.add("hide")
+  setTimeout(()=>{
+    loginContainer.style.position = 'absolute';
+  },500)
+  setTimeout(()=>{
+    registerContainer.classList.add('show')
+  }, 500)
+  // setTimeout(()=>{
+  //   modalContainer.classList.add("open")
+  // }, 1000)
+})
+
+let backBtn = document.getElementById('back-btn')
+backBtn.addEventListener('click', ()=>{
+  registerContainer.classList.remove('show')
+  loginContainer.style.position = 'static';
+  setTimeout(()=>{
+    loginContainer.classList.remove("hide")
+  }, 500)
+})
+  //* login with id alibi 
+  
+      scanBtn.addEventListener('click', ()=>{
+        localStorage.setItem("data-action", "scanqr-login")
+        modalContainer.classList.add("open")
+      })
+
+  //* This is for the password visibility on login
+  var togglePassword = document.querySelector(".toggle-password");
+
+togglePassword.addEventListener('click', function(){
+    togglePassword.classList.toggle('showing');
+
+    const password = document.getElementById('password');
+    password.type = password.type === "password"
+    ? "text"
+    : "password"
+   
+})
+
+let closeModal = document.querySelector(".close-modal")
+closeModal.addEventListener("click", ()=>{
+  modalContainer.classList.remove("open")
+})
+
+let username = document.querySelector("#reg-username")
+username.addEventListener('click', ()=> {
+  if (username.value == ""){
+    modalContainer.classList.add("open")
+  }
+})
+
+// Form input validation
+let formInput = document.querySelectorAll('.form-input')
+for (input of formInput){
+  input.addEventListener('input', function(e){
+    const isValid = e.target.reportValidity()
+    e.target.setAttribute('aria-invalid', !isValid)
+    e.target.reportValidity()
+  })
+}
+
+document.querySelector("#register-btn").addEventListener('click', ()=> {
+  if (document.querySelector("#reg-username").value == ""){
+    alert("SCAN QR FIRST!")
+  }
+
+  for (input of formInput){
+    const isValid = input.checkValidity()
+    if (!isValid){
+      input.setAttribute('aria-invalid', !isValid)
+      input.reportValidity()
+      break
+    }
+  }
+})
+
+
+
+let formWrapper = document.querySelector(".form-wrapper")
+formWrapper.style.justifyContent = "center"
+if(window.innerWidth < 368){   
+  formWrapper.style.justifyContent = "flex-start"
+  }
+ window.addEventListener("resize", function(){
+  if(formWrapper.scrollHeight > formWrapper.clientHeight || formWrapper.scrollWidth > formWrapper.clientWidth){
+    formWrapper.style.justifyContent = "flex-start"
+  }else {
+    formWrapper.style.justifyContent = "center"
+  }
+ })
+
+</script>
+
+</html>

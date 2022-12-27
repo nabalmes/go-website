@@ -1,0 +1,140 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: corporate-america-mysql
+  namespace: pudding-staging
+spec:
+  storageClassName: ssd
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: corporate-america-mysql
+  namespace: pudding-staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: corporate-america-mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: corporate-america-mysql
+    spec:
+      containers:
+      - name: corporate-america-mysql
+        image: mysql
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+          - mountPath: /var/lib/mysql
+            name: corporate-america-mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "root password"  # In real production, we use k8s secrects
+        - name: MYSQL_DATABASE
+          value: corporate_america
+        - name: MYSQL_USER
+          value: "test_app_user" # In real production, we use k8s secrects
+        - name: MYSQL_PASSWORD
+          value: "my really good password" # In real production, we use k8s secrects
+      volumes:
+      - name: corporate-america-mysql
+        persistentVolumeClaim:
+          claimName: corporate-america-mysql
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: corporate-america
+  namespace: pudding-staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: corporate-america
+  template:
+    metadata:
+      labels:
+        app: corporate-america
+    spec:
+      containers:
+      - name: corporate-america
+        image: registry.integranet.ph/pudding/corporate-america:latest
+        ports:
+        - containerPort: 2930
+          name: http
+        env:
+        - name: UADMIN_DB_TYPE
+          value: mysql
+        - name: UADMIN_DB_HOST
+          value: corporate-america-mysql
+        - name: UADMIN_DB_NAME
+          value: "corporate_america"
+        - name: UADMIN_DB_USER
+          value: test_app_user 
+        - name: UADMIN_DB_PASSWORD
+          value: "my really good password"
+      imagePullSecrets:
+      - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: corporate-america
+  namespace: pudding-staging
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 2930
+  selector:
+    app: corporate-america
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: corporate-america-mysql
+  namespace: pudding-staging
+spec:
+  ports:
+    - name: mysql
+      port: 3306
+      targetPort: 3306
+  selector:
+    app: corporate-america-mysql
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: corporate-america
+  namespace: pudding-staging
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    # nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+spec:
+  tls:
+  - hosts:
+    - app.digitalalibi.ai
+    secretName: corporate-america
+  rules:
+    - host: app.digitalalibi.ai
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: corporate-america
+                port:
+                  number: 80
+  ingressClassName: nginx

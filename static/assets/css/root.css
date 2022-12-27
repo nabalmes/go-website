@@ -1,0 +1,24 @@
+@font-face {
+	font-family: 'America-Extended';
+	src: url('../font/GT-America-Expanded-Black-1d9c98c9e937c2251bf9b4c3fda5db38.woff2');
+	font-weight: bold;
+}
+
+@font-face {
+	font-family: 'America-Light';
+	src: url('../font/GT-America-Extended-Light-0a3767375dc7020228173ee88665d1e3.woff2');
+	font-weight: bold;
+}
+
+@font-face {
+	font-family: 'America-Regular';
+	src: url('../font/GT-America-Mono-Regular-72bfafe2cef91603f08edde5514a0afb.woff2');
+	font-weight: bold;
+}
+
+@font-face {
+	font-family: 'America-Bold';
+	src: url('../font/GT-Sectra-Fine-Bold-23b3344434247f9eb8cabd9f5e923ee3.woff2');
+	font-weight: bold;
+}
+

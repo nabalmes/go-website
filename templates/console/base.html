@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="integritynet">
+  <meta name="description" content="pudding mobile">
+  <meta name="keywords" content="software engineering, software development, web development, software, web, engineering, development, developer, designer, user interface, user experience, developer relation, product design, web design, design, design system, system, React, framework, Svelte, vanilla, javascript, html, css, node, philippines, batangas, computer science">
+
+  <meta property="og:title" content="pudding mobile">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="../static/assets/img/pudding-logo">
+  <meta property="og:url" content="">
+  <meta property="og:description" content="A pudding mobile app monitoring">
+  
+  <link rel="stylesheet" href="../static/assets/css/login.css">
+  <link rel="stylesheet" href="../static/assets/css/dashboard.css">
+  <link rel="stylesheet" href="../static/assets/css/validator.css">
+  <!-- <link rel="stylesheet" href="../static/assets/css/dashboard.css"> -->
+
+  {{ template "title" .}}
+</head>
+<body>
+
+</div>
+  <nav class="global-header-outer">
+    <header class="global-header">
+      <div class="header-logo">
+        <a href="#" class="logo-text">
+          <img src="../static/assets/images/cia-logo.png" alt="logoo">
+          <span>Central Intelligence Agency</span>
+        </a>
+
+        <div class="navbar__toggle" id="mobile-menu">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+        <div class="navbar__menu">
+          <!-- <a class="navbar__link" id="dashboard">Dashboard</a> -->
+          <a class="navbar__link" id="tag">Tag</a>
+          <a class="navbar__link" id="maintenance">Maintenance</a>
+          <a class="navbar__link" id="reports">Reports</a>
+          <a href="/logout" class="navbar__link">Log Out</a>
+        </div>
+        <!-- <a id="logout-btn" href="/logout">Log Out</a> -->
+      </div>
+    </header>
+  </nav>
+  <main class="main-content">
+    
+    {{ template "content" .}}
+
+  </main>
+    
+</body>
+<script src="../static/jquery/jquery.3.1.6.min.js"></script>
+<script>
+
+  // This is for the burger nav
+  const menu = document.getElementById('mobile-menu');
+  const menuLinks = document.querySelector('.navbar__menu');
+  const navLogo = document.getElementById('navbar__logo');
+  const body = document.querySelector('body');
+
+  // Display menu - Mobileview
+  const mobileMenu = function () {
+    menu.classList.toggle('is-active');
+    menuLinks.classList.toggle('active');
+    body.classList.toggle('active')
+  }
+  menu.addEventListener('click', mobileMenu)
+
+  // side-nav and content active state
+  
+  let sideNav = document.querySelectorAll(".navbar__link")
+  sideNav.forEach(e => {
+    e.addEventListener("click", ()=>{
+      sideNav.forEach(btn => btn.classList.remove('active'));
+      e.classList.toggle('active')
+
+      let content = document.querySelectorAll('.dashboard-container')
+      let tagContent = document.getElementById("digital-alibi") 
+      let mainteContent = document.getElementById("maintenance-cont") 
+      let reportsContent = document.getElementById("reports-cont") 
+
+      let tag = document.getElementById("tag")
+      let maintenance = document.getElementById("maintenance")
+      let reports = document.getElementById("reports")
+
+      if(tag.classList.contains('active')){
+        content.forEach(cont =>{
+            cont.style.display = "none";
+        })
+        tagContent.style.display = "flex";
+      }
+
+      if(maintenance.classList.contains('active')){
+        content.forEach(cont =>{
+            cont.style.display = "none";
+        })
+        mainteContent.style.display = "flex";
+      }
+
+      if(reports.classList.contains('active')){
+        content.forEach(cont =>{
+            cont.style.display = "none";
+        })
+        reportsContent.style.display = "flex";
+      }
+
+      if(window.innerWidth < 768){
+        
+        const navMenu = document.querySelector(".navbar__menu").classList.remove('active');
+        const navToggle = document.querySelector(".navbar__toggle").classList.remove('is-active');
+    }
+     
+    })
+
+   
+  })
+</script>
+
+</html>
